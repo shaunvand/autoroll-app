@@ -3,9 +3,10 @@
  * caption, 10 actions. Each action mutates server-side then refreshes batch.
  */
 import { useEffect, useState, useCallback } from "react";
-import { View, Text, FlatList, Pressable, TextInput, ActivityIndicator, ScrollView, Dimensions, Alert } from "react-native";
+import { View, Text, Pressable, TextInput, ActivityIndicator, ScrollView, Dimensions, Alert } from "react-native";
 import { Image } from "expo-image";
 import { useLocalSearchParams, router } from "expo-router";
+import Animated, { FadeIn, FadeOut, SlideInRight, SlideOutLeft, ZoomIn } from "react-native-reanimated";
 import { api } from "@/lib/api";
 import { C } from "@/lib/theme";
 
@@ -65,11 +66,13 @@ export default function ApproveScreen() {
         <Text style={{ color: C.muted }}>{idx + 1} / {batch.candidates.length}</Text>
       </View>
 
-      {c.image_url ? (
-        <Image source={{ uri: c.image_url }} style={{ width: width - 32, height: width - 32, borderRadius: 16, marginBottom: 12 }} contentFit="cover" />
-      ) : (
-        <View style={{ width: width - 32, height: width - 32, borderRadius: 16, backgroundColor: C.border, marginBottom: 12 }} />
-      )}
+      <Animated.View key={c.id} entering={SlideInRight.duration(280)} exiting={SlideOutLeft.duration(180)}>
+        {c.image_url ? (
+          <Image source={{ uri: c.image_url }} style={{ width: width - 32, height: width - 32, borderRadius: 16, marginBottom: 12 }} contentFit="cover" />
+        ) : (
+          <View style={{ width: width - 32, height: width - 32, borderRadius: 16, backgroundColor: C.border, marginBottom: 12 }} />
+        )}
+      </Animated.View>
 
       <View style={{ flexDirection: "row", marginBottom: 12 }}>
         <Text style={{ backgroundColor: C.text, color: "#fff", paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999, fontSize: 12, fontWeight: "600" }}>
